@@ -76,31 +76,32 @@
   </form>
 
   <p id="message"></p>
-  <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxabve4hX1QNFNvYR_JQz_o_OLKmheYENI4Y0lSNGHcDI4tihcZY7zjDcja2vZNXmd4xQ/exec";
+  
+<script>
+  const scriptURL = "https://script.google.com/macros/s/XXXXXXXXXXXXXXXXX/exec";
 
-    document.getElementById("voteForm").addEventListener("submit", function(e){
-      e.preventDefault();
+  document.getElementById("voteForm").addEventListener("submit", function(e){
+    e.preventDefault();
 
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData.entries());
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
 
-      fetch(scriptURL, {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-      })
-      .then(res => res.json())
-      .then(res => {
-        document.getElementById("message").innerText = "投票ありがとうございました！";
-        e.target.reset();
-      })
-      .catch(err => {
-        document.getElementById("message").innerText = "エラーが発生しました…";
-        console.error(err);
-      });
+    fetch(scriptURL, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" }
+    })
+    .then(res => res.json())
+    .then(res => {
+      document.getElementById("message").innerText = "投票ありがとうございました！";
+      e.target.reset();
+    })
+    .catch(err => {
+      document.getElementById("message").innerText = "エラーが発生しました…";
+      console.error("Fetchエラー:", err);
     });
-  </script>
+  });
+</script>
 
 </body>
 </html>
