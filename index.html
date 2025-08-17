@@ -76,13 +76,31 @@
   </form>
 
   <p id="message"></p>
-
   <script>
+    const scriptURL = "ここにGoogle Apps ScriptのURLを入れる";
+
     document.getElementById("voteForm").addEventListener("submit", function(e){
       e.preventDefault();
-      document.getElementById("message").innerText = "投票ありがとうございました！（実際にはここでGoogle Sheetsに送信されます）";
-      // TODO: Google Sheets APIに送信処理を追加
+
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(res => res.json())
+      .then(res => {
+        document.getElementById("message").innerText = "投票ありがとうございました！";
+        e.target.reset();
+      })
+      .catch(err => {
+        document.getElementById("message").innerText = "エラーが発生しました…";
+        console.error(err);
+      });
     });
   </script>
+
 </body>
 </html>
