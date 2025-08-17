@@ -93,13 +93,14 @@ fetch(scriptURL, {
   headers: { "Content-Type": "application/json" }
 })
 .then(() => {
-  document.getElementById("message").innerText = "投票ありがとうございました！";
+  document.getElementById("message").innerText = "投票ありがとうございました！（no-corsモード）";
   e.target.reset();
 })
 .catch(err => {
   document.getElementById("message").innerText = "エラーが発生しました…";
   console.error("Fetchエラー:", err);
 });
+
 </script>
 
 </body>
