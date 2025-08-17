@@ -86,21 +86,20 @@
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
-    fetch(scriptURL, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" }
-    })
-    .then(res => res.json())
-    .then(res => {
-      document.getElementById("message").innerText = "投票ありがとうございました！";
-      e.target.reset();
-    })
-    .catch(err => {
-      document.getElementById("message").innerText = "エラーが発生しました…";
-      console.error("Fetchエラー:", err);
-    });
-  });
+fetch(scriptURL, {
+  method: "POST",
+  mode: "no-cors", // ← これ追加
+  body: JSON.stringify(data),
+  headers: { "Content-Type": "application/json" }
+})
+.then(() => {
+  document.getElementById("message").innerText = "投票ありがとうございました！";
+  e.target.reset();
+})
+.catch(err => {
+  document.getElementById("message").innerText = "エラーが発生しました…";
+  console.error("Fetchエラー:", err);
+});
 </script>
 
 </body>
