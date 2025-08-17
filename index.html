@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>エースをねらえ！キャスティング投票</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: auto; padding: 20px; }
+    h1 { text-align: center; }
+    .character { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
+    label { font-weight: bold; }
+    .submit { display: block; margin: 30px auto; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h1>エースをねらえ！ キャスティング投票</h1>
+  <p>あなたが思うベストキャストを選んでください！<br>
+     選択肢から選ぶか、「自由記入」に好きな俳優名を入力できます。</p>
+  
+  <form id="voteForm">
+    <div class="character">
+      <label>岡ひろみ（純真で努力家の女子高生）</label><br>
+      <select name="okahiromi">
+        <option value="">-- 選択してください --</option>
+        <option value="広瀬すず">広瀬すず</option>
+        <option value="森七菜">森七菜</option>
+        <option value="永野芽郁">永野芽郁</option>
+      </select><br>
+      自由記入: <input type="text" name="okahiromi_custom">
+    </div>
+
+    <div class="character">
+      <label>宗方仁（情熱的な鬼コーチ）</label><br>
+      <select name="munakata">
+        <option value="">-- 選択してください --</option>
+        <option value="大泉洋">大泉洋</option>
+        <option value="竹野内豊">竹野内豊</option>
+        <option value="佐藤浩市">佐藤浩市</option>
+      </select><br>
+      自由記入: <input type="text" name="munakata_custom">
+    </div>
+
+    <div class="character">
+      <label>竜崎麗香（お蝶夫人、気高いライバル）</label><br>
+      <select name="reika">
+        <option value="">-- 選択してください --</option>
+        <option value="北川景子">北川景子</option>
+        <option value="柴咲コウ">柴咲コウ</option>
+        <option value="綾瀬はるか">綾瀬はるか</option>
+      </select><br>
+      自由記入: <input type="text" name="reika_custom">
+    </div>
+
+    <div class="character">
+      <label>緑川蘭子（冷静沈着な実力者）</label><br>
+      <select name="ranko">
+        <option value="">-- 選択してください --</option>
+        <option value="橋本愛">橋本愛</option>
+        <option value="二階堂ふみ">二階堂ふみ</option>
+        <option value="満島ひかり">満島ひかり</option>
+      </select><br>
+      自由記入: <input type="text" name="ranko_custom">
+    </div>
+
+    <div class="character">
+      <label>桂大悟（誠実な先輩）</label><br>
+      <select name="katsura">
+        <option value="">-- 選択してください --</option>
+        <option value="横浜流星">横浜流星</option>
+        <option value="山崎賢人">山崎賢人</option>
+        <option value="菅田将暉">菅田将暉</option>
+      </select><br>
+      自由記入: <input type="text" name="katsura_custom">
+    </div>
+
+    <button type="submit" class="submit">投票する</button>
+  </form>
+
+  <p id="message"></p>
+
+  <script>
+    document.getElementById("voteForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      document.getElementById("message").innerText = "投票ありがとうございました！（実際にはここでGoogle Sheetsに送信されます）";
+      // TODO: Google Sheets APIに送信処理を追加
+    });
+  </script>
+</body>
+</html>
