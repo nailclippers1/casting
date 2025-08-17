@@ -78,7 +78,7 @@
   <p id="message"></p>
   
 <script>
-  const scriptURL = "https://script.google.com/macros/s/AKfycbypsRKJXXYyf9d5Cxw5gTkCGaQNEd_vRU2IokZf1S0r7t6ASk3uyAMNCBf7a4zPV9ex0Q/exec";
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyWiI7rn9fpohzJvw0MCkYYbq8_8e_NgTco9ExLs6bNF94TBAkuMW5tM0asUzM5qq7C6w/exec";
 
   document.getElementById("voteForm").addEventListener("submit", function(e){
     e.preventDefault();
@@ -88,18 +88,8 @@
 
 fetch(scriptURL, {
   method: "POST",
-  mode: "no-cors", // ← これ追加
-  body: JSON.stringify(data),
-  headers: { "Content-Type": "application/json" }
+  body: new FormData(e.target)  // ← JSONではなくFormDataで送る
 })
-.then(() => {
-  document.getElementById("message").innerText = "投票ありがとうございました！（no-corsモード）";
-  e.target.reset();
-})
-.catch(err => {
-  document.getElementById("message").innerText = "エラーが発生しました…";
-  console.error("Fetchエラー:", err);
-});
 
 </script>
 
