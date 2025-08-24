@@ -2,76 +2,130 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>投票結果ランキング</title>
+  <title>キャスティング投票結果</title>
   <style>
-    body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; }
-    h1 { text-align: center; }
-    .character { margin: 20px 0; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
-    ol { padding-left: 20px; }
+    body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; }
+    .sidebar {
+      width: 220px; background: #f4f4f4; border-right: 1px solid #ccc;
+      padding: 20px; overflow-y: auto;
+    }
+    .sidebar h2 { font-size: 16px; margin-top: 0; }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar li { margin: 10px 0; }
+    .sidebar a {
+      text-decoration: none; color: #333; display: block; padding: 5px;
+    }
+    .sidebar a.active { background: #007bff; color: white; border-radius: 4px; }
+    .content {
+      flex: 1; padding: 20px; overflow-y: auto;
+    }
+    .ranking { margin-bottom: 30px; }
+    .bar {
+      background: #007bff; color: white; padding: 5px;
+      margin: 3px 0; border-radius: 4px;
+    }
   </style>
+  <!-- Chart.jsを利用（棒グラフ用） -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <h1>投票結果ランキング</h1>
-  <label>作品を選択: 
-    <select id="workSelector"></select>
-  </label>
+  <!-- サイドメニュー -->
+  <div class="sidebar">
+    <h2>作品一覧</h2>
+    <ul>
+      <li><a href="#" data-work="aim_for_the_ace" class="active">エースをねらえ！</a></li>
+      <li><a href="#" data-work="glass_mask">ガラスの仮面</a></li>
+      <li><a href="#" data-work="slam_dunk">スラムダンク</a></li>
+      <!-- ここに作品を追加していける -->
+    </ul>
+  </div>
 
-  <div id="results"></div>
+  <!-- メイン表示エリア -->
+  <div class="content">
+    <h1 id="work-title">エースをねらえ！</h1>
+    <div id="results"></div>
+    <canvas id="chart"></canvas>
+  </div>
 
-  <script>
-    const scriptURL = "https://script.google.com/macros/s/【あなたのGASデプロイURL】/exec";
+<script>
+  // ★ Google Apps Script の Web API URL に置き換えて！
+  const API_URL = "https://script.google.com/macros/s/xxxxxxxxxxxxxxxxx/exec";
 
-    async function loadResults() {
-      const res = await fetch(scriptURL);
-      const data = await res.json();
+  let chartInstance = null;
 
-      const workSelector = document.getElementById("workSelector");
-      workSelector.innerHTML = "";
+  // サイドメニュークリック処理
+  document.querySelectorAll(".sidebar a").forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      document.querySelectorAll(".sidebar a").forEach(a => a.classList.remove("active"));
+      link.classList.add("active");
+      const work = link.dataset.work;
+      const title = link.textContent;
+      document.getElementById("work-title").textContent = title;
+      loadResults(work);
+    });
+  });
 
-      Object.keys(data).forEach(work => {
-        const opt = document.createElement("option");
-        opt.value = work;
-        opt.textContent = work;
-        workSelector.appendChild(opt);
+  // データ取得＆描画
+  async function loadResults(work) {
+    try {
+      const response = await fetch(`${API_URL}?work=${work}`);
+      const data = await response.json();
+
+      // 集計処理
+      const counts = {};
+      data.forEach(row => {
+        const [timestamp, character, actor] = row;
+        if (!counts[character]) counts[character] = {};
+        counts[character][actor] = (counts[character][actor] || 0) + 1;
       });
 
-      workSelector.addEventListener("change", () => renderResults(data, workSelector.value));
+      // テキストランキング表示
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "";
+      Object.keys(counts).forEach(character => {
+        const ranking = Object.entries(counts[character])
+          .sort((a, b) => b[1] - a[1]);
+        const div = document.createElement("div");
+        div.className = "ranking";
+        div.innerHTML = `<h2>${character}</h2>` +
+          ranking.map(([actor, votes]) =>
+            `<div class="bar" style="width:${votes*30}px">${actor} (${votes}票)</div>`
+          ).join("");
+        resultsDiv.appendChild(div);
+      });
 
-      // 初期表示
-      if (Object.keys(data).length > 0) {
-        renderResults(data, Object.keys(data)[0]);
-      }
+      // 棒グラフ描画（例：最初のキャラだけ）
+      const firstChar = Object.keys(counts)[0];
+      const labels = Object.keys(counts[firstChar]);
+      const votes = Object.values(counts[firstChar]);
+
+      if (chartInstance) chartInstance.destroy();
+      const ctx = document.getElementById("chart").getContext("2d");
+      chartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: `${firstChar} の投票結果`,
+            data: votes,
+            backgroundColor: "rgba(0,123,255,0.6)"
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+
+    } catch (err) {
+      console.error(err);
+      document.getElementById("results").innerHTML = "データ取得エラー";
     }
+  }
 
-    function renderResults(data, work) {
-      const container = document.getElementById("results");
-      container.innerHTML = "";
-
-      const characters = data[work];
-      for (const char in characters) {
-        const charDiv = document.createElement("div");
-        charDiv.className = "character";
-
-        const title = document.createElement("h2");
-        title.textContent = char;
-        charDiv.appendChild(title);
-
-        const ranking = Object.entries(characters[char])
-          .sort((a, b) => b[1] - a[1]); // 票数でソート
-
-        const ol = document.createElement("ol");
-        ranking.forEach(([actor, votes]) => {
-          const li = document.createElement("li");
-          li.textContent = `${actor} — ${votes}票`;
-          ol.appendChild(li);
-        });
-
-        charDiv.appendChild(ol);
-        container.appendChild(charDiv);
-      }
-    }
-
-    loadResults();
-  </script>
+  // 初期表示
+  loadResults("aim_for_the_ace");
+</script>
 </body>
 </html>
