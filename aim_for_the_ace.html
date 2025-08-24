@@ -47,4 +47,83 @@
         <option value="北川景子">北川景子</option>
         <option value="柴咲コウ">柴咲コウ</option>
         <option value="綾瀬はるか">綾瀬はるか</option>
-      </selec
+      </select><br>
+      自由記入: <input type="text" name="reika_custom">
+    </div>
+
+    <div class="character">
+      <label>緑川蘭子（冷静沈着な実力者）</label><br>
+      <select name="ranko">
+        <option value="">-- 選択してください --</option>
+        <option value="橋本愛">橋本愛</option>
+        <option value="二階堂ふみ">二階堂ふみ</option>
+        <option value="満島ひかり">満島ひかり</option>
+      </select><br>
+      自由記入: <input type="text" name="ranko_custom">
+    </div>
+
+    <div class="character">
+      <label>桂大悟（誠実な先輩）</label><br>
+      <select name="katsura">
+        <option value="">-- 選択してください --</option>
+        <option value="横浜流星">横浜流星</option>
+        <option value="山崎賢人">山崎賢人</option>
+        <option value="菅田将暉">菅田将暉</option>
+      </select><br>
+      自由記入: <input type="text" name="katsura_custom">
+    </div>
+
+    <button type="submit" class="submit">投票する</button>
+  </form>
+  
+  <p id="message"></p>
+
+  <div class="back">
+    <a href="index.html">← トップに戻る</a>
+  </div>
+  
+<script>
+  const scriptURL = "https://script.google.com/macros/s/【あなたのGASデプロイURL】/exec";
+
+  document.getElementById("voteForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    // 自由記入が優先、なければ選択肢
+    const okahiromi = data.okahiromi_custom || data.okahiromi;
+    const munakata = data.munakata_custom || data.munakata;
+    const reika = data.reika_custom || data.reika;
+    const ranko = data.ranko_custom || data.ranko;
+    const katsura = data.katsura_custom || data.katsura;
+
+    // Google Sheetsに送信するデータ
+    const payload = {
+      Work: "エースをねらえ！",
+      okahiromi,
+      munakata,
+      reika,
+      ranko,
+      katsura
+    };
+
+    fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      })
+      .then(response => {
+        if (response.ok) {
+          document.getElementById("message").textContent = "投票が完了しました！ありがとうございます。";
+        } else {
+          document.getElementById("message").textContent = "投票に失敗しました。時間をおいて再度お試しください。";
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        document.getElementById("message").textContent = "通信エラーが発生しました。";
+      });
+  });
+</script>
+</body>
+</html>
