@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>エースをねらえ！投票結果</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: sans-serif; max-width: 900px; margin: auto; padding: 20px; }
+    h1 { text-align: center; margin-bottom: 40px; }
+    .character { margin: 40px 0; }
+    canvas { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <h1>エースをねらえ！ 投票結果</h1>
+  <div id="results"></div>
+
+<script>
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/【スプレッドシートID】/gviz/tq?tqx=out:json&sheet=aim_for_the_ace";
+
+// キャラクターごとにデータを集計
+async function loadData() {
+  const res = await fetch(SHEET_URL);
+  const text = await res.text();
+  const json = JSON.parse(text.substr(47).slice(0,-2));
+
+  const rows = json.table.rows;
+  const data = {
+    okahiromi: {},
+    munakata: {},
+    reika: {},
+    ranko: {},
+    katsura: {}
+  };
+
+  rows.forEach(r => {
+    const [timestamp, okahiromi, munakata, reika, ranko, katsura] = r.c.map(c => c ? c.v : "");
+    if (okahiromi) data.okahiromi[okahiromi] = (data.okahiromi[okahiromi] || 0) + 1;
+    if (munakata) data.munakata[munakata] = (data.munakata[munakata] || 0) + 1;
+    if (reika) data.reika[reika] = (data.reika[reika] || 0) + 1;
+    if (ranko) data.ranko[ranko] = (data.ranko[ranko] || 0) + 1;
+    if (katsura) data.katsura[katsura] = (data.katsura[katsura] || 0) + 1;
+  });
+
+  renderResults("岡ひろみ", data.okahiromi);
+  renderResults("宗方仁", data.munakata);
+  renderResults("竜崎麗香", data.reika);
+  renderResults("緑川蘭子", data.ranko);
+  renderResults("桂大悟", data.katsura);
+}
+
+// ランキングと棒グラフを描画
+function renderResults(character, votes) {
+  const sorted = Object.entries(votes).sort((a,b)=>b[1]-a[1]);
+
+  const container = document.getElementById("results");
+  const div = document.createElement("div");
+  div.className = "character";
+  div.innerHTML = `<h2>${character}</h2>`;
+
+  // テキストランキング
+  const list = document.createElement("ol");
+  sorted.forEach(([name, count])=>{
+    const li = document.createElement("li");
+    li.textContent = `${name} (${count}票)`;
+    list.appendChild(li);
+  });
+  div.appendChild(list);
+
+  // 棒グラフ
+  const canvas = document.createElement("canvas");
+  div.appendChild(canvas);
+  container.appendChild(div);
+
+  new Chart(canvas, {
+    type: "bar",
+    data: {
+      labels: sorted.map(s=>s[0]),
+      datasets: [{
+        label: `${character} 投票数`,
+        data: sorted.map(s=>s[1]),
+        backgroundColor: "rgba(75, 192, 192, 0.6)"
+      }]
+    },
+    options: {
+      indexAxis: "y",
+      scales: {
+        x: { beginAtZero: true, ticks: { precision:0 } }
+      }
+    }
+  });
+}
+
+loadData();
+</script>
+</body>
+</html>
