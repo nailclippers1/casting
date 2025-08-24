@@ -2,13 +2,14 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>エースをねらえ！キャスティング投票</title>
+  <title>エースをねらえ！ キャスティング投票</title>
   <style>
     body { font-family: sans-serif; max-width: 700px; margin: auto; padding: 20px; }
     h1 { text-align: center; }
     .character { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
     label { font-weight: bold; }
     .submit { display: block; margin: 30px auto; padding: 10px 20px; }
+    .back { text-align:center; margin-top:20px; }
   </style>
 </head>
 <body>
@@ -17,24 +18,16 @@
      選択肢から選ぶか、「自由記入」に好きな俳優名を入力できます。</p>
   
   <form id="voteForm">
-<div class="character" style="display:flex; justify-content:space-between; align-items:flex-start; gap:20px;">
-  <!-- 左：投票フォーム -->
-  <div style="flex:1;">
-    <label>岡ひろみ（純真で努力家の女子高生）</label><br>
-    <select name="okahiromi">
-      <option value="">-- 選択してください --</option>
-      <option value="広瀬すず">広瀬すず</option>
-      <option value="森七菜">森七菜</option>
-      <option value="永野芽郁">永野芽郁</option>
-    </select><br>
-    自由記入: <input type="text" name="okahiromi_custom">
-  </div>
-
-  <!-- 右：アフィリエイト -->
-  <div style="flex:0 0 240px; text-align:right;">
-    <div class="kaerebalink-box" style="text-align:left;padding-bottom:20px;font-size:small;zoom: 1;overflow: hidden;"><div class="kaerebalink-image" style="float:left;margin:0 15px 10px 0;"><a href="https://hb.afl.rakuten.co.jp/hgc/g000001k.ywxrm6bf.g000001k.ywxrn231/kaereba_main_202508241522476348?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F6cd8f8091e48698723379e19c349b0a3%2F&m=http%3A%2F%2Fm.product.rakuten.co.jp%2Fproduct%2F6cd8f8091e48698723379e19c349b0a3%2F&rafcid=wsc_i_ps_1087413314923222742" target="_blank" ><img src="https://thumbnail.image.rakuten.co.jp/ran/img/2001/0009/784/834/272/291/20010009784834272291_1.jpg?_ex=128x128" style="border: none;" /></a></div><div class="kaerebalink-info" style="line-height:120%;zoom: 1;overflow: hidden;"><div class="kaerebalink-name" style="margin-bottom:10px;line-height:120%"><a href="https://hb.afl.rakuten.co.jp/hgc/g000001k.ywxrm6bf.g000001k.ywxrn231/kaereba_main_202508241522476348?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F6cd8f8091e48698723379e19c349b0a3%2F&m=http%3A%2F%2Fm.product.rakuten.co.jp%2Fproduct%2F6cd8f8091e48698723379e19c349b0a3%2F&rafcid=wsc_i_ps_1087413314923222742" target="_blank" >エ-スをねらえ！ １/ホ-ム社（千代田区）/山本鈴美香</a><div class="kaerebalink-powered-date" style="font-size:8pt;margin-top:5px;font-family:verdana;line-height:120%">posted with <a href="https://kaereba.com" rel="nofollow" target="_blank">カエレバ</a></div></div><div class="kaerebalink-detail" style="margin-bottom:5px;"></div><div class="kaerebalink-link1" style="margin-top:10px;"><div class="shoplinkrakuten" style="display:inline;margin-right:5px"><a href="https://hb.afl.rakuten.co.jp/hgc/g000001k.ywxrm6bf.g000001k.ywxrn231/kaereba_main_202508241522476348?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F6cd8f8091e48698723379e19c349b0a3%2F&m=http%3A%2F%2Fm.product.rakuten.co.jp%2Fproduct%2F6cd8f8091e48698723379e19c349b0a3%2F&rafcid=wsc_i_ps_1087413314923222742" target="_blank" >楽天市場</a></div><div class="shoplinkamazon" style="display:inline;margin-right:5px"><a href="https://www.amazon.co.jp/gp/search?keywords=%E3%82%A8%E3%83%BC%E3%82%B9%E3%82%92%E3%81%AD%E3%82%89%E3%81%88%EF%BC%81%EF%BC%91&__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&tag=nailclipper07-22" target="_blank" >Amazon</a></div></div></div><div class="booklink-footer" style="clear: left"></div></div>
-  </div>  
-</div>
+    <div class="character">
+      <label>岡ひろみ（純真で努力家の女子高生）</label><br>
+      <select name="okahiromi">
+        <option value="">-- 選択してください --</option>
+        <option value="広瀬すず">広瀬すず</option>
+        <option value="森七菜">森七菜</option>
+        <option value="永野芽郁">永野芽郁</option>
+      </select><br>
+      自由記入: <input type="text" name="okahiromi_custom">
+    </div>
 
     <div class="character">
       <label>宗方仁（情熱的な鬼コーチ）</label><br>
@@ -46,7 +39,7 @@
       </select><br>
       自由記入: <input type="text" name="munakata_custom">
     </div>
-    
+
     <div class="character">
       <label>竜崎麗香（お蝶夫人、気高いライバル）</label><br>
       <select name="reika">
@@ -54,81 +47,4 @@
         <option value="北川景子">北川景子</option>
         <option value="柴咲コウ">柴咲コウ</option>
         <option value="綾瀬はるか">綾瀬はるか</option>
-      </select><br>
-      自由記入: <input type="text" name="reika_custom">
-    </div>
-
-    <div class="character">
-      <label>緑川蘭子（冷静沈着な実力者）</label><br>
-      <select name="ranko">
-        <option value="">-- 選択してください --</option>
-        <option value="橋本愛">橋本愛</option>
-        <option value="二階堂ふみ">二階堂ふみ</option>
-        <option value="満島ひかり">満島ひかり</option>
-      </select><br>
-      自由記入: <input type="text" name="ranko_custom">
-    </div>
-
-    <div class="character">
-      <label>桂大悟（誠実な先輩）</label><br>
-      <select name="katsura">
-        <option value="">-- 選択してください --</option>
-        <option value="横浜流星">横浜流星</option>
-        <option value="山崎賢人">山崎賢人</option>
-        <option value="菅田将暉">菅田将暉</option>
-      </select><br>
-      自由記入: <input type="text" name="katsura_custom">
-    </div>
-
-    <button type="submit" class="submit">投票する</button>
-  </form>
-  
-  <p id="message"></p>
-  
-<script>
-  const scriptURL = "https://script.google.com/macros/s/AKfycbwHfVItLxt1uasSwipoC4L05NjV0rW7X4rXInj3c7BpQHjWCAE240hNQeKiuueW3tupkA/exec";
-
-  document.getElementById("voteForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-
-    // 自由記入欄が空の場合は、選択肢の値を採用
-    const okahiromi = data.okahiromi_custom || data.okahiromi;
-    const munakata = data.munakata_custom || data.munakata;
-    const reika = data.reika_custom || data.reika;
-    const ranko = data.ranko_custom || data.ranko;
-    const katsura = data.katsura_custom || data.katsura;
-
-    // 送信するデータをオブジェクトとしてまとめる
-    const payload = {
-      okahiromi,
-      munakata,
-      reika,
-      ranko,
-      katsura
-    };
-
-    fetch(scriptURL, {
-        method: "POST",
-        // JSON.stringifyでオブジェクトを文字列に変換
-        body: JSON.stringify(payload)
-      })
-      .then(response => {
-        if (response.ok) {
-          // 成功メッセージを表示
-          document.getElementById("message").textContent = "投票が完了しました！ありがとうございます。";
-        } else {
-          // 失敗メッセージを表示
-          document.getElementById("message").textContent = "投票に失敗しました。時間をおいて再度お試しください。";
-        }
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        document.getElementById("message").textContent = "通信エラーが発生しました。";
-      });
-  });
-</script>
-</body>
-</html>
+      </selec
