@@ -1,40 +1,77 @@
-<div id="results"></div>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>投票結果ランキング</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; }
+    h1 { text-align: center; }
+    .character { margin: 20px 0; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
+    ol { padding-left: 20px; }
+  </style>
+</head>
+<body>
+  <h1>投票結果ランキング</h1>
+  <label>作品を選択: 
+    <select id="workSelector"></select>
+  </label>
 
-<script>
-  const apiURL = "https://script.google.com/macros/s/XXXXXX/exec"; // Google Apps Script Web API
+  <div id="results"></div>
 
-  fetch(apiURL)
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById("results");
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/【あなたのGASデプロイURL】/exec";
 
-      // 作品ごとにグループ化
-      const works = {};
-      data.forEach(vote => {
-        if (!works[vote.Work]) works[vote.Work] = {};
-        if (!works[vote.Work][vote.Character]) works[vote.Work][vote.Character] = {};
-        works[vote.Work][vote.Character][vote.Actor] = 
-          (works[vote.Work][vote.Character][vote.Actor] || 0) + 1;
+    async function loadResults() {
+      const res = await fetch(scriptURL);
+      const data = await res.json();
+
+      const workSelector = document.getElementById("workSelector");
+      workSelector.innerHTML = "";
+
+      Object.keys(data).forEach(work => {
+        const opt = document.createElement("option");
+        opt.value = work;
+        opt.textContent = work;
+        workSelector.appendChild(opt);
       });
 
-      // 表示
-      for (const work in works) {
-        const section = document.createElement("div");
-        section.innerHTML = `<h2>${work}</h2>`;
-        
-        for (const chara in works[work]) {
-          const ranking = Object.entries(works[work][chara])
-            .sort((a,b) => b[1]-a[1]); // 票数順ソート
+      workSelector.addEventListener("change", () => renderResults(data, workSelector.value));
 
-          let list = `<h3>${chara}</h3><ol>`;
-          ranking.forEach(([actor, count]) => {
-            list += `<li>${actor}（${count}票）</li>`;
-          });
-          list += "</ol>";
-
-          section.innerHTML += list;
-        }
-        container.appendChild(section);
+      // 初期表示
+      if (Object.keys(data).length > 0) {
+        renderResults(data, Object.keys(data)[0]);
       }
-    });
-</script>
+    }
+
+    function renderResults(data, work) {
+      const container = document.getElementById("results");
+      container.innerHTML = "";
+
+      const characters = data[work];
+      for (const char in characters) {
+        const charDiv = document.createElement("div");
+        charDiv.className = "character";
+
+        const title = document.createElement("h2");
+        title.textContent = char;
+        charDiv.appendChild(title);
+
+        const ranking = Object.entries(characters[char])
+          .sort((a, b) => b[1] - a[1]); // 票数でソート
+
+        const ol = document.createElement("ol");
+        ranking.forEach(([actor, votes]) => {
+          const li = document.createElement("li");
+          li.textContent = `${actor} — ${votes}票`;
+          ol.appendChild(li);
+        });
+
+        charDiv.appendChild(ol);
+        container.appendChild(charDiv);
+      }
+    }
+
+    loadResults();
+  </script>
+</body>
+</html>
