@@ -1,0 +1,40 @@
+<div id="results"></div>
+
+<script>
+  const apiURL = "https://script.google.com/macros/s/XXXXXX/exec"; // Google Apps Script Web API
+
+  fetch(apiURL)
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("results");
+
+      // 作品ごとにグループ化
+      const works = {};
+      data.forEach(vote => {
+        if (!works[vote.Work]) works[vote.Work] = {};
+        if (!works[vote.Work][vote.Character]) works[vote.Work][vote.Character] = {};
+        works[vote.Work][vote.Character][vote.Actor] = 
+          (works[vote.Work][vote.Character][vote.Actor] || 0) + 1;
+      });
+
+      // 表示
+      for (const work in works) {
+        const section = document.createElement("div");
+        section.innerHTML = `<h2>${work}</h2>`;
+        
+        for (const chara in works[work]) {
+          const ranking = Object.entries(works[work][chara])
+            .sort((a,b) => b[1]-a[1]); // 票数順ソート
+
+          let list = `<h3>${chara}</h3><ol>`;
+          ranking.forEach(([actor, count]) => {
+            list += `<li>${actor}（${count}票）</li>`;
+          });
+          list += "</ol>";
+
+          section.innerHTML += list;
+        }
+        container.appendChild(section);
+      }
+    });
+</script>
