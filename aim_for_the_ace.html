@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>エースをねらえ！キャスティング投票</title>
+  <title>エースをねらえ！ キャスティング投票</title>
   <style>
     body { font-family: sans-serif; max-width: 700px; margin: auto; padding: 20px; }
     h1 { text-align: center; }
@@ -78,7 +78,8 @@
   <p id="message"></p>
   
 <script>
-  const scriptURL = "https://script.google.com/macros/s/AKfycbzt4ixKPEwh2jF5qu-G2rKe-uym7nJDACE0O807mkTPAkw10QiDOcQxOTVAIi9aBDNqKw/exec";
+  // ★ あなたのGASデプロイURLをここに設定 ★
+  const scriptURL = "https://script.google.com/macros/s/xxxxxxxxxxxxxxxxxxxxxxxxxxxx/exec";
 
   document.getElementById("voteForm").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -86,7 +87,7 @@
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
-    // 自由記入があれば優先
+    // 自由記入が優先される
     const votes = {
       "岡ひろみ": data.okahiromi_custom || data.okahiromi,
       "宗方仁": data.munakata_custom || data.munakata,
@@ -95,14 +96,9 @@
       "桂大悟": data.katsura_custom || data.katsura
     };
 
-    // 空欄を削除
-    Object.keys(votes).forEach(key => {
-      if (!votes[key]) delete votes[key];
-    });
-
     const payload = {
-      work: "エースをねらえ", // ★作品名を指定（シート名になる）
-      votes: votes
+      work: "エースをねらえ！", // ← このページ固有の作品名
+      votes
     };
 
     fetch(scriptURL, {
@@ -110,8 +106,8 @@
         body: JSON.stringify(payload)
       })
       .then(response => response.json())
-      .then(res => {
-        if (res.result === "success") {
+      .then(result => {
+        if (result.result === "success") {
           document.getElementById("message").textContent = "投票が完了しました！ありがとうございます。";
         } else {
           document.getElementById("message").textContent = "投票に失敗しました。";
