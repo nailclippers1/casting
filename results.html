@@ -22,8 +22,10 @@
     }
     #content { flex: 1; padding: 20px; }
     h1 { margin-top: 0; }
-    .character-result { margin: 30px 0; }
-    canvas { max-width: 600px; }
+    .character-result { margin: 15px 0; padding: 10px 0; border-bottom: 1px solid #ddd; }
+    .character-result h2 { margin: 0 0 10px; font-size: 18px; }
+    ol { margin: 0 0 10px 20px; }
+    canvas { max-width: 600px; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -76,21 +78,32 @@ function loadResults(work) {
 
       Object.keys(data.results).forEach(character => {
         const votes = data.results[character];
-
-        // 投票数でソート（降順）
         const sorted = Object.entries(votes).sort((a,b) => b[1] - a[1]);
 
-        // テキストランキング
-        let html = `<div class="character-result"><h2>${character}</h2><ol>`;
-        sorted.forEach(([actor, count]) => {
-          html += `<li>${actor} — ${count}票</li>`;
-        });
-        html += "</ol><canvas id='chart_" + character + "'></canvas></div>";
-        resultsDiv.innerHTML += html;
+        // 要素を組み立てる
+        const container = document.createElement("div");
+        container.className = "character-result";
 
-        // 棒グラフ
-        const ctx = document.getElementById("chart_" + character);
-        new Chart(ctx, {
+        const title = document.createElement("h2");
+        title.textContent = character;
+        container.appendChild(title);
+
+        const list = document.createElement("ol");
+        sorted.forEach(([actor, count]) => {
+          const li = document.createElement("li");
+          li.textContent = `${actor} — ${count}票`;
+          list.appendChild(li);
+        });
+        container.appendChild(list);
+
+        // canvasを追加
+        const canvas = document.createElement("canvas");
+        container.appendChild(canvas);
+
+        resultsDiv.appendChild(container);
+
+        // 棒グラフを描画
+        new Chart(canvas, {
           type: 'bar',
           data: {
             labels: sorted.map(([actor]) => actor),
@@ -110,7 +123,7 @@ function loadResults(work) {
     });
 }
 
-// 初期ロード（エースをねらえ）
+// 初期ロード
 loadResults("エースをねらえ");
 </script>
 </body>
