@@ -9,7 +9,6 @@
     .character { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
     label { font-weight: bold; }
     .submit { display: block; margin: 30px auto; padding: 10px 20px; }
-    .back { text-align:center; margin-top:20px; }
   </style>
 </head>
 <body>
@@ -77,13 +76,9 @@
   </form>
   
   <p id="message"></p>
-
-  <div class="back">
-    <a href="index.html">← トップに戻る</a>
-  </div>
   
 <script>
-  const scriptURL = "https://script.google.com/macros/s/AKfycbwRQvJDJ7f3VbWNdU811ISI6jFZH7T-w-m21XXgzDyhGfkB2aBND15x1Loa67YvS6g9Jw/exec";
+  const scriptURL = "https://script.google.com/macros/s/AKfycbwDIzCvQUqmhFMQuHB9vhBdyQ_zr98Bgxg5Xev73PEmViUOGHn9Ys2Zbtk4T8WosLI2jQ/exec";
 
   document.getElementById("voteForm").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -91,21 +86,16 @@
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
-    // 自由記入が優先、なければ選択肢
-    const okahiromi = data.okahiromi_custom || data.okahiromi;
-    const munakata = data.munakata_custom || data.munakata;
-    const reika = data.reika_custom || data.reika;
-    const ranko = data.ranko_custom || data.ranko;
-    const katsura = data.katsura_custom || data.katsura;
-
-    // Google Sheetsに送信するデータ
+    // キャラクターごとに「自由記入」優先
     const payload = {
-      Work: "エースをねらえ！",
-      okahiromi,
-      munakata,
-      reika,
-      ranko,
-      katsura
+      work: "aim_for_the_ace",
+      characters: {
+        "岡ひろみ": data.okahiromi_custom || data.okahiromi,
+        "宗方仁": data.munakata_custom || data.munakata,
+        "竜崎麗香": data.reika_custom || data.reika,
+        "緑川蘭子": data.ranko_custom || data.ranko,
+        "桂大悟": data.katsura_custom || data.katsura
+      }
     };
 
     fetch(scriptURL, {
@@ -115,6 +105,7 @@
       .then(response => {
         if (response.ok) {
           document.getElementById("message").textContent = "投票が完了しました！ありがとうございます。";
+          e.target.reset();
         } else {
           document.getElementById("message").textContent = "投票に失敗しました。時間をおいて再度お試しください。";
         }
