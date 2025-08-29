@@ -102,26 +102,39 @@ function loadResults(work) {
 
         resultsDiv.appendChild(container);
 
-        // 棒グラフを描画
-        new Chart(canvas, {
-          type: 'bar',
-          data: {
-            labels: sorted.map(([actor]) => actor),
-            datasets: [{
-              label: "票数",
-              data: sorted.map(([_, count]) => count),
-              backgroundColor: "rgba(75,192,192,0.6)"
-            }]
-          },
-          options: {
-            indexAxis: 'y',
-            plugins: { legend: { display: false } },
-            scales: { x: { beginAtZero: true } }
-          }
-        });
-      });
-    });
-}
+        // 棒グラフを描画
+        new Chart(canvas, {
+          type: 'bar',
+          data: {
+            labels: sorted.map(([actor]) => actor),
+            datasets: [{
+              label: "票数",
+              data: sorted.map(([_, count]) => count),
+              backgroundColor: "rgba(75,192,192,0.6)",
+              barPercentage: 0.8 // バーの太さを調整
+            }]
+          },
+          options: {
+            // ▼▼▼▼▼ ここからが修正・追加箇所 ▼▼▼▼▼
+            responsive: true,
+            maintainAspectRatio: false, // コンテナのサイズに合わせて描画する
+            // ▲▲▲▲▲ ここまで ▲▲▲▲▲
+
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: { 
+              x: { 
+                beginAtZero: true,
+                // ▼▼▼▼▼ ここからが追加箇所 ▼▼▼▼▼
+                // 票数は整数なので、目盛りも整数にする
+                ticks: {
+                  stepSize: 1
+                }
+                // ▲▲▲▲▲ ここまで ▲▲▲▲▲
+              } 
+            }
+          }
+        });
 
 // 初期ロード
 loadResults("エースをねらえ！");
