@@ -13,23 +13,25 @@
     .submit { display: block; margin: 30px auto; padding: 10px 20px; }
   </style>
 </head>
-<body>
-  <h1>エースをねらえ！ キャスティング投票</h1>
-  <p>あなたが思うベストキャストを選んでください！<br>
-     選択肢から選ぶか、「自由記入」に好きな俳優名を入力できます。</p>
-  
-  <form id="voteForm">
-    <div class="character">
-      <label>岡ひろみ（純真で努力家の女子高生）</label><br>
-      <select name="okahiromi">
-        <option value="">-- 選択してください --</option>
-        <option value="広瀬すず">広瀬すず</option>
-        <option value="森七菜">森七菜</option>
-        <option value="永野芽郁">永野芽郁</option>
-      </select><br>
-      自由記入: <input type="text" name="okahiromi_custom">
+<body class="bg-light">
+  <div class="container py-5">
+    <div class="text-center mb-4">
+      <h1 class="display-5 fw-bold">エースをねらえ！</h1>
+      <p class="lead">あなたが思うベストキャストを選んで投票してください！</p>
     </div>
-
+    
+    <form id="voteForm" class="card p-4 shadow-sm">
+      <div class="mb-4">
+        <label for="okahiromi" class="form-label fs-5">岡ひろみ（純真で努力家の女子高生）</label>
+        <select name="okahiromi" id="okahiromi" class="form-select mb-2">
+          <option value="">-- 選択してください --</option>
+          <option value="広瀬すず">広瀬すず</option>
+          <option value="森七菜">森七菜</option>
+          <option value="永野芽郁">永野芽郁</option>
+        </select>
+        <input type="text" name="okahiromi_custom" class="form-control" placeholder="自由記入はこちら">
+      </div>
+      
     <div class="character">
       <label>宗方仁（情熱的な鬼コーチ）</label><br>
       <select name="munakata">
