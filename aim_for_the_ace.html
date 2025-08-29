@@ -83,15 +83,28 @@
   
 <script>
   // ★ あなたのGASデプロイURLをここに設定 ★
-  const scriptURL = "https://script.google.com/macros/s/AKfycbzt4ixKPEwh2jF5qu-G2rKe-uym7nJDACE0O807mkTPAkw10QiDOcQxOTVAIi9aBDNqKw/exec";
+  const scriptURL = "https://script.google.com/macros/s/AKfy.../exec";
+  const workTitle = "エースをねらえ！"; // 作品名を定数として定義
 
-  document.getElementById("voteForm").addEventListener("submit", function(e) {
+  const voteForm = document.getElementById("voteForm");
+  const messageEl = document.getElementById("message");
+  const submitButton = voteForm.querySelector("button[type='submit']");
+
+  // 1. ページ読み込み時に投票済みかチェック
+  if (localStorage.getItem("voted_" + workTitle)) {
+    messageEl.textContent = "この作品には投票済みです。";
+    messageEl.classList.add("text-danger"); // (Bootstrap)文字を赤くする
+    submitButton.disabled = true; // ボタンを無効化
+  }
+
+  voteForm.addEventListener("submit", function(e) {
     e.preventDefault();
+    submitButton.disabled = true; // 投票処理中にボタンを無効化
+    messageEl.textContent = "投票を送信中...";
 
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
-    // 自由記入が優先される
     const votes = {
       "岡ひろみ": data.okahiromi_custom || data.okahiromi,
       "宗方仁": data.munakata_custom || data.munakata,
@@ -101,26 +114,33 @@
     };
 
     const payload = {
-      work: "エースをねらえ！", // ← このページ固有の作品名
+      work: workTitle,
       votes
     };
 
     fetch(scriptURL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      })
-      .then(response => response.json())
-      .then(result => {
-        if (result.result === "success") {
-          document.getElementById("message").textContent = "投票が完了しました！ありがとうございます。";
-        } else {
-          document.getElementById("message").textContent = "投票に失敗しました。";
-        }
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        document.getElementById("message").textContent = "通信エラーが発生しました。";
-      });
+      method: "POST",
+      body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(result => {
+      if (result.result === "success") {
+        messageEl.textContent = "投票が完了しました！ありがとうございます。";
+        messageEl.classList.add("text-success"); // (Bootstrap)文字を緑にする
+
+        // 2. 投票成功後にローカルストレージに記録
+        localStorage.setItem("voted_" + workTitle, "true");
+        
+      } else {
+        messageEl.textContent = "投票に失敗しました。";
+        submitButton.disabled = false; // 失敗したら再度押せるようにする
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      messageEl.textContent = "通信エラーが発生しました。";
+      submitButton.disabled = false; // 失敗したら再度押せるようにする
+    });
   });
 </script>
 </body>
