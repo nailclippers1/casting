@@ -80,31 +80,44 @@
   </form>
   
   <p id="message"></p>
-  
+
 <script>
   // ★ あなたのGASデプロイURLをここに設定 ★
-  const scriptURL = "https://script.google.com/macros/s/AKfy.../exec";
-  const workTitle = "エースをねらえ！"; // 作品名を定数として定義
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzt4ixKPEwh2jF5qu-G2rKe-uym7nJDACE0O807mkTPAkw10QiDOcQxOTVAIi9aBDNqKw/exec"; // ← ご自身のURLに書き換えてください
+  
+  // このページの作品名を定義（重要）
+  const workTitle = "エースをねらえ！";
 
+  // HTML要素を取得
   const voteForm = document.getElementById("voteForm");
   const messageEl = document.getElementById("message");
   const submitButton = voteForm.querySelector("button[type='submit']");
 
-  // 1. ページ読み込み時に投票済みかチェック
-  if (localStorage.getItem("voted_" + workTitle)) {
-    messageEl.textContent = "この作品には投票済みです。";
-    messageEl.classList.add("text-danger"); // (Bootstrap)文字を赤くする
-    submitButton.disabled = true; // ボタンを無効化
+  // --- ここからが重複投票防止のロジックです ---
+
+  // 1. ページが読み込まれた瞬間に、この作品に投票済みかチェック
+  const votedKey = "voted_" + workTitle; // ローカルストレージ用のキーを作成 (例: "voted_エースをねらえ！")
+  
+  if (localStorage.getItem(votedKey)) {
+    // 投票済みのキーがあれば、メッセージを表示してフォームを無効化
+    messageEl.textContent = "この作品には投票済みです。ご協力ありがとうございました。";
+    submitButton.disabled = true; // ボタンを押せなくする
+    
+    // フォーム内のすべての入力部品を無効化
+    voteForm.querySelectorAll("select, input").forEach(input => {
+      input.disabled = true;
+    });
   }
 
+  // フォームが送信されたときの処理
   voteForm.addEventListener("submit", function(e) {
-    e.preventDefault();
-    submitButton.disabled = true; // 投票処理中にボタンを無効化
-    messageEl.textContent = "投票を送信中...";
+    e.preventDefault(); // デフォルトの送信をキャンセル
+    submitButton.disabled = true;
+    messageEl.textContent = "投票を送信中です...";
 
+    // （...フォームデータの収集部分は変更なし...）
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-
     const votes = {
       "岡ひろみ": data.okahiromi_custom || data.okahiromi,
       "宗方仁": data.munakata_custom || data.munakata,
@@ -112,12 +125,9 @@
       "緑川蘭子": data.ranko_custom || data.ranko,
       "桂大悟": data.katsura_custom || data.katsura
     };
+    const payload = { work: workTitle, votes };
 
-    const payload = {
-      work: workTitle,
-      votes
-    };
-
+    // GASにデータを送信
     fetch(scriptURL, {
       method: "POST",
       body: JSON.stringify(payload)
@@ -126,20 +136,19 @@
     .then(result => {
       if (result.result === "success") {
         messageEl.textContent = "投票が完了しました！ありがとうございます。";
-        messageEl.classList.add("text-success"); // (Bootstrap)文字を緑にする
-
-        // 2. 投票成功後にローカルストレージに記録
-        localStorage.setItem("voted_" + workTitle, "true");
         
+        // 2. 投票が成功したら、ブラウザに「投票済み」の記録を残す
+        localStorage.setItem(votedKey, "true");
+
       } else {
-        messageEl.textContent = "投票に失敗しました。";
-        submitButton.disabled = false; // 失敗したら再度押せるようにする
+        messageEl.textContent = "エラーにより投票に失敗しました。";
+        submitButton.disabled = false; // 失敗した場合は再度ボタンを押せるようにする
       }
     })
     .catch(error => {
       console.error("Error:", error);
-      messageEl.textContent = "通信エラーが発生しました。";
-      submitButton.disabled = false; // 失敗したら再度押せるようにする
+      messageEl.textContent = "通信エラーが発生しました。時間をおいて再度お試しください。";
+      submitButton.disabled = false;
     });
   });
 </script>
