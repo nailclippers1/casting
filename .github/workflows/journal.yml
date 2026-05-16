@@ -1,0 +1,27 @@
+name: 毎日ジャーナル記録
+
+on:
+  schedule:
+    - cron: '0 15 * * *'  # 毎日 00:00 JST (= 15:00 UTC)
+  workflow_dispatch:        # 手動実行も可能
+
+jobs:
+  record-journal:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: チェックアウト
+        uses: actions/checkout@v4
+
+      - name: 投票結果を取得してジャーナルに記録
+        run: python3 scripts/record_journal.py
+
+      - name: ジャーナルをコミット & プッシュ
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add journal/
+          git diff --staged --quiet || git commit -m "ジャーナル記録: $(TZ='Asia/Tokyo' date '+%Y-%m-%d')"
+          git push
