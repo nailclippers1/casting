@@ -2,25 +2,20 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>キャスティング投票ポータル</title>
-  <style>
-    body { font-family: sans-serif; max-width: 700px; margin: auto; padding: 20px; }
-    h1 { text-align: center; }
-    ul { list-style: none; padding: 0; }
-    li { margin: 15px 0; }
-    a { display: block; padding: 10px; border: 1px solid #ccc; border-radius: 8px;
-        text-decoration: none; color: #000; font-weight: bold; background: #f9f9f9; }
-    a:hover { background: #eee; }
-  </style>
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-  <h1>キャスティング投票ポータル</h1>
-  <p>投票したい作品を選んでください。</p>
-  <ul>
-    <li><a href="aim_for_the_ace.html">エースをねらえ！</a></li>
-    <li><a href="slam_dunk.html">SLAM DUNK</a></li>
-    <li><a href="glass_no_kamen.html">ガラスの仮面</a></li>
-    <li><a href="rose_of_versailles.html">ベルサイユのばら</a></li>
-  </ul>
+  <div class="wrap">
+    <div class="work-hero">
+      <h1>🎬 キャスティング投票</h1>
+      <p class="lead">アニメ・漫画・小説を実写化するなら誰がいい？ 作品を選んで投票しよう！</p>
+    </div>
+    <ul class="work-list" id="works"></ul>
+    <div class="disclosure" id="disclosure"></div>
+  </div>
+  <script src="assets/common.js"></script>
+  <script src="assets/index.js"></script>
 </body>
 </html>

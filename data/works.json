@@ -1,0 +1,74 @@
+{
+  "config": {
+    "apiBase": "https://mysecondbrain.duckdns.org/api/casting",
+    "turnstileSiteKey": "",
+    "affiliateTag": "",
+    "disclosure": "当サイトは Amazon アソシエイト・プログラムの参加者です。掲載の商品画像・リンクは各商品の販売ページに遷移します。"
+  },
+  "works": [
+    {
+      "id": "aim_for_the_ace",
+      "title": "エースをねらえ！",
+      "subtitle": "あなたが思うベストキャストを選んで投票してください！",
+      "theme": "#d2691e",
+      "product": { "url": "", "image": "" },
+      "characters": [
+        {
+          "id": "okahiromi",
+          "name": "岡ひろみ",
+          "desc": "純真で努力家の女子高生",
+          "icon": "🎾",
+          "candidates": [
+            { "name": "広瀬すず", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" },
+            { "name": "森七菜", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" },
+            { "name": "永野芽郁", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" }
+          ]
+        },
+        {
+          "id": "munakata",
+          "name": "宗方仁",
+          "desc": "情熱的な鬼コーチ",
+          "icon": "🔥",
+          "candidates": [
+            { "name": "大泉洋", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" },
+            { "name": "竹野内豊", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" },
+            { "name": "佐藤浩市", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" }
+          ]
+        },
+        {
+          "id": "reika",
+          "name": "竜崎麗香",
+          "desc": "お蝶夫人、気高いライバル",
+          "icon": "🦋",
+          "candidates": [
+            { "name": "北川景子", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" },
+            { "name": "柴咲コウ", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" },
+            { "name": "綾瀬はるか", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" }
+          ]
+        },
+        {
+          "id": "ranko",
+          "name": "緑川蘭子",
+          "desc": "冷静沈着な実力者",
+          "icon": "🎾",
+          "candidates": [
+            { "name": "橋本愛", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" },
+            { "name": "二階堂ふみ", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" },
+            { "name": "満島ひかり", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" }
+          ]
+        },
+        {
+          "id": "katsura",
+          "name": "桂大悟",
+          "desc": "誠実な先輩",
+          "icon": "🎾",
+          "candidates": [
+            { "name": "横浜流星", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" },
+            { "name": "山崎賢人", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" },
+            { "name": "菅田将暉", "agency": "", "roles": "", "product": { "url": "", "image": "" }, "profileUrl": "" }
+          ]
+        }
+      ]
+    }
+  ]
+}
